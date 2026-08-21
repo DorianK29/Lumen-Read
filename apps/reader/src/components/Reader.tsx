@@ -37,16 +37,17 @@ import { DropZone, SplitView, useDndContext, useSplitViewItem } from './base'
 import * as pages from './pages'
 
 function handleKeyDown(tab?: BookTab) {
+  const rtl = tab?.isRTL
   return (e: KeyboardEvent) => {
     try {
       switch (e.code) {
         case 'ArrowLeft':
         case 'ArrowUp':
-          tab?.prev()
+          rtl ? tab?.next() : tab?.prev()
           break
         case 'ArrowRight':
         case 'ArrowDown':
-          tab?.next()
+          rtl ? tab?.prev() : tab?.next()
           break
         case 'Space':
           e.shiftKey ? tab?.prev() : tab?.next()
@@ -190,6 +191,8 @@ function BookPane({ tab, onMouseDown, active }: BookPaneProps) {
   const [, setAction] = useAction()
 
   const { iframe, rendition, rendered, container, book } = useSnapshot(tab)
+
+  const isRTL = book.metadata?.direction === 'rtl'
 
   useTilg()
 
@@ -478,9 +481,9 @@ function BookPane({ tab, onMouseDown, active }: BookPaneProps) {
       const side = w * threshold
 
       if (x < side) {
-        tab.prev()
+        tab.isRTL ? tab.next() : tab.prev()
       } else if (w - x < side) {
-        tab.next()
+        tab.isRTL ? tab.prev() : tab.next()
       } else if (mobile) {
         setNavbar((a) => !a)
       }
@@ -489,9 +492,9 @@ function BookPane({ tab, onMouseDown, active }: BookPaneProps) {
 
   useEventListener(iframe, 'wheel', (e) => {
     if (e.deltaY < 0) {
-      tab.prev()
+      tab.isRTL ? tab.next() : tab.prev()
     } else {
-      tab.next()
+      tab.isRTL ? tab.prev() : tab.next()
     }
   })
 
@@ -532,11 +535,11 @@ function BookPane({ tab, onMouseDown, active }: BookPaneProps) {
       }
 
       if (deltaX > 0) {
-        tab.prev()
+        tab.isRTL ? tab.next() : tab.prev()
       }
 
       if (deltaX < 0) {
-        tab.next()
+        tab.isRTL ? tab.prev() : tab.next()
       }
     }
   })
@@ -569,6 +572,7 @@ function BookPane({ tab, onMouseDown, active }: BookPaneProps) {
       creator={displayCreator}
       tabs={allTabs}
       selectedTabIndex={selectedTabIndex}
+      rtl={isRTL}
       onTabSelect={(index) => {
         if (group) {
           group.selectTab(index)
@@ -653,6 +657,7 @@ interface ReaderPaneHeaderProps {
   creator?: string
   tabs?: any[]
   selectedTabIndex?: number
+  rtl?: boolean
   onTabSelect?: (index: number) => void
   onTabClose?: (index: number) => void
   onNext?: () => void
@@ -667,6 +672,7 @@ const ReaderPaneHeader: React.FC<ReaderPaneHeaderProps> = ({
   creator: _creator,
   tabs,
   selectedTabIndex = 0,
+  rtl,
   onTabSelect,
   onTabClose,
   onNext,
@@ -765,13 +771,13 @@ const ReaderPaneHeader: React.FC<ReaderPaneHeaderProps> = ({
       <div className="flex-grow"></div>
       <div className="flex items-center space-x-2">
         <button
-          onClick={onPrev}
+          onClick={rtl ? onNext : onPrev}
           className="rounded p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
         >
           <span className="material-symbols-outlined">chevron_left</span>
         </button>
         <button
-          onClick={onNext}
+          onClick={rtl ? onPrev : onNext}
           className="rounded p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
         >
           <span className="material-symbols-outlined">chevron_right</span>
