@@ -1057,7 +1057,7 @@ function BookPane({ tab, onMouseDown, active }: BookPaneProps) {
     />
   )
 
-  const footer = <ReaderPaneFooter percentage={book.percentage} />
+  const footer = <ReaderPaneFooter percentage={book.percentage} rtl={isRTL} />
 
   return (
     <NewReaderLayout header={header} footer={footer}>
@@ -1251,10 +1251,12 @@ const ReaderPaneHeader: React.FC<ReaderPaneHeaderProps> = ({
 
 interface ReaderPaneFooterProps {
   percentage?: number
+  rtl?: boolean
 }
 
 const ReaderPaneFooter: React.FC<ReaderPaneFooterProps> = ({
   percentage = 0,
+  rtl,
 }) => {
   return (
     <footer className="border-border-light dark:border-border-dark relative flex h-14 shrink-0 items-center justify-between border-t px-6">
@@ -1264,13 +1266,26 @@ const ReaderPaneFooter: React.FC<ReaderPaneFooterProps> = ({
         <div className="bg-primary/20 relative h-0.5 w-full rounded-full shadow-sm">
           <div
             className="bg-primary absolute h-full rounded-full transition-all duration-300"
-            style={{ width: `${percentage * 100}%` }}
+            style={
+              rtl
+                ? { right: 0, width: `${percentage * 100}%` }
+                : { left: 0, width: `${percentage * 100}%` }
+            }
           ></div>
           <div
             className="absolute top-1/2 -translate-y-1/2 transition-all duration-300"
-            style={{ left: `${percentage * 100}%` }}
+            style={
+              rtl
+                ? { right: `${percentage * 100}%` }
+                : { left: `${percentage * 100}%` }
+            }
           >
-            <div className="bg-primary border-surface-light dark:border-surface-dark h-2.5 w-2.5 -translate-x-1/2 rounded-full border-2 shadow-sm"></div>
+            <div
+              className={clsx(
+                'bg-primary border-surface-light dark:border-surface-dark h-2.5 w-2.5 rounded-full border-2 shadow-sm',
+                rtl ? 'translate-x-1/2' : '-translate-x-1/2',
+              )}
+            ></div>
           </div>
         </div>
       </div>

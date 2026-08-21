@@ -320,7 +320,7 @@ function NavigationBar() {
   )
 }
 
-interface ActionBarProps extends ComponentProps<'ul'> {}
+interface ActionBarProps extends ComponentProps<'ul'> { }
 function ActionBar({ className, ...props }: ActionBarProps) {
   return (
     <ul className={clsx('ActionBar flex sm:flex-col', className)} {...props} />
@@ -396,7 +396,13 @@ const SideBar: React.FC = () => {
           'SideBar bg-surface flex flex-col overflow-hidden transition-all duration-200 ease-in-out',
           mobile ? 'absolute inset-y-0 right-0 z-10' : '',
         )}
-        style={{ width: mobile ? '75%' : size }}
+        style={{
+          // On mobile the sidebar is an overlay, so it must collapse to 0
+          // when closed. Otherwise the empty 75%-wide panel (with an opaque
+          // `bg-surface` background) keeps covering the reader and blocking
+          // all pointer events.
+          width: mobile ? (action ? '75%' : 0) : size,
+        }}
         onTransitionEnd={onTransitionEnd}
       >
         {CurrentView && (
@@ -410,7 +416,7 @@ const SideBar: React.FC = () => {
   )
 }
 
-interface ReaderProps extends ComponentProps<'div'> {}
+interface ReaderProps extends ComponentProps<'div'> { }
 const Reader: React.FC<ReaderProps> = ({
   className,
   ...props
