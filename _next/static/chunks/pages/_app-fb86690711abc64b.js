@@ -36386,14 +36386,12 @@ var IframeView = /*#__PURE__*/ function() {
                 this.iframe.seamless = "seamless";
                 // Back up if seamless isn't supported
                 this.iframe.style.border = "none";
-                // sandbox
-                this.iframe.sandbox = "allow-same-origin";
-                if (this.settings.allowScriptedContent) {
-                    this.iframe.sandbox += " allow-scripts";
-                }
-                if (this.settings.allowPopups) {
-                    this.iframe.sandbox += " allow-popups";
-                }
+                // NOTE: Intentionally no `sandbox` attribute here. With `allow-same-origin`
+                // + `allow-scripts` the sandbox provided no real isolation (a same-origin
+                // script can remove its own sandbox), but it *did* stop some mobile
+                // browsers from injecting extension content scripts into the frame — which
+                // broke popup dictionary extensions inside the reading view on phones.
+                // A plain same-origin iframe keeps those extensions working everywhere.
                 this.iframe.setAttribute("enable-annotation", "true");
                 this.resizing = true;
                 // this.iframe.style.display = "none";
