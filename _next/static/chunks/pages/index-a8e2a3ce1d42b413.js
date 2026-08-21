@@ -3284,14 +3284,14 @@ function BookPane(param) {
     });
     (0,hooks_dist/* useEventListener */.OR)(iframe, "mousedown", onMouseDown);
     (0,hooks_dist/* useEventListener */.OR)(iframe, "click", function(e) {
-        // https://developer.chrome.com/blog/tap-to-search
-        e.preventDefault();
         var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
         try {
             for(var _iterator = e.composedPath()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
                 var el = _step.value;
                 // `instanceof` may not work in iframe
                 if (el.tagName === "A" && el.href) {
+                    // Prevent the iframe from navigating to the link target.
+                    e.preventDefault();
                     tab.showPrevLocation();
                     return;
                 }
