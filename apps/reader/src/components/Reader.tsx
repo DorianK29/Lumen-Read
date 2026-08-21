@@ -927,16 +927,6 @@ function BookPane({ tab, onMouseDown, active }: BookPaneProps) {
         setClickedAnnotation(false)
         return
       }
-
-      const w = container.clientWidth
-      const x = e.clientX % w
-      const threshold = 0.3
-      const side = w * threshold
-
-      // Edge taps no longer turn pages. A center tap toggles the navbar on mobile.
-      if (mobile && x >= side && w - x >= side) {
-        setNavbar((a) => !a)
-      }
     }
   })
 
@@ -1036,8 +1026,8 @@ function BookPane({ tab, onMouseDown, active }: BookPaneProps) {
       }}
       onNext={() => tab.next()}
       onPrev={() => tab.prev()}
-      onToc={() => {
-        setAction('toc')
+      onMore={() => {
+        setNavbar((a) => !a)
       }}
       onClose={() => {
         // Close the current tab
@@ -1114,7 +1104,7 @@ interface ReaderPaneHeaderProps {
   onTabClose?: (index: number) => void
   onNext?: () => void
   onPrev?: () => void
-  onToc?: () => void
+  onMore?: () => void
   onClose?: () => void
   onMenu?: () => void
 }
@@ -1129,7 +1119,7 @@ const ReaderPaneHeader: React.FC<ReaderPaneHeaderProps> = ({
   onTabClose,
   onNext,
   onPrev,
-  onToc,
+  onMore,
   onClose,
   onMenu,
 }) => {
@@ -1236,7 +1226,7 @@ const ReaderPaneHeader: React.FC<ReaderPaneHeaderProps> = ({
         </button>
         <div className="mx-2 h-6 w-px bg-gray-200 dark:bg-gray-700"></div>
         <button
-          onClick={onToc}
+          onClick={onMore}
           className="rounded p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
         >
           <span className="material-symbols-outlined">more_horiz</span>

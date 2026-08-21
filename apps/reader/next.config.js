@@ -122,11 +122,11 @@ const docker = base
 const shouldEnableSentry = !process.env.SKIP_SENTRY
 const prod = shouldEnableSentry
   ? withSentryConfig(
-      base,
-      // Make sure adding Sentry options is the last code to run before exporting, to
-      // ensure that your source maps include changes from all other Webpack plugins
-      sentryWebpackPluginOptions,
-    )
+    base,
+    // Make sure adding Sentry options is the last code to run before exporting, to
+    // ensure that your source maps include changes from all other Webpack plugins
+    sentryWebpackPluginOptions,
+  )
   : base
 
 module.exports = IS_DEV ? dev : IS_DOCKER ? docker : prod
