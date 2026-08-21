@@ -42437,9 +42437,14 @@ function useAsync(func) {
 function useDisablePinchZooming(win) {
     (0,react.useEffect)(function() {
         var _win = win !== null && win !== void 0 ? win : window;
-        // Block pinch-zooming on iOS outside of the content area
+        // Only block two-finger pinch zoom. Calling preventDefault() on every
+        // touchmove also cancels single-finger taps, long-press text selection,
+        // and popup dictionary extensions inside the iframe, so single-finger
+        // gestures are left untouched.
         var handleTouchMove = function(event) {
-            event.preventDefault();
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
         };
         _win.document.addEventListener("touchmove", handleTouchMove, {
             passive: false
