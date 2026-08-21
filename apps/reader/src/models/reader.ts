@@ -136,7 +136,7 @@ interface TimelineItem {
 }
 
 class BaseTab {
-  constructor(public readonly id: string, public readonly title = id) {}
+  constructor(public readonly id: string, public readonly title = id) { }
 
   get isBook(): boolean {
     return this instanceof BookTab
@@ -175,6 +175,23 @@ export class BookTab extends BaseTab {
     return this.timeline[0]?.location
   }
 
+  /**
+   * The reading direction of this book. Resolved from the rendition settings
+   * (which read the OPF `page-progression-direction`) with a fallback to the
+   * book metadata.
+   */
+  get direction() {
+    return (
+      this.rendition?.settings?.direction ||
+      this.book.metadata.direction ||
+      'ltr'
+    )
+  }
+
+  get isRTL() {
+    return this.direction === 'rtl'
+  }
+
   display(target?: string, returnable = true) {
     console.log('[Reader Model] display called with:', { target, returnable })
     if (target && this.sections) {
@@ -201,7 +218,12 @@ export class BookTab extends BaseTab {
   prev() {
     this.rendition?.prev()
     // avoid content flash
-    if (this.container?.scrollLeft === 0 && !this.location?.atStart) {
+    // (scrollLeft behaves differently for RTL books, so only apply this for LTR)
+    if (
+      !this.isRTL &&
+      this.container?.scrollLeft === 0 &&
+      !this.location?.atStart
+    ) {
       this.rendered = false
     }
   }

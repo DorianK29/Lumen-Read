@@ -22,11 +22,11 @@ export interface RenditionOptions {
   manager?: 'default' | 'continuous' | Function | object
   view?: 'iframe' | Function | object
   flow?:
-    | 'auto'
-    | 'paginated'
-    | 'scrolled'
-    | 'scrolled-continuous'
-    | 'scrolled-doc'
+  | 'auto'
+  | 'paginated'
+  | 'scrolled'
+  | 'scrolled-continuous'
+  | 'scrolled-doc'
   layout?: 'reflowable' | 'pre-paginated'
   spread?: RenditionSpread
   minSpreadWidth?: number
@@ -36,7 +36,8 @@ export interface RenditionOptions {
   infinite?: boolean
   overflow?: string
   snap?: boolean | object
-  defaultDirection?: 'ltr'
+  direction?: string
+  defaultDirection?: 'ltr' | 'rtl'
   allowScriptedContent?: boolean
 }
 
