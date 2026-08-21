@@ -903,12 +903,11 @@ function BookPane({ tab, onMouseDown, active }: BookPaneProps) {
   useEventListener(iframe, 'mousedown', onMouseDown)
 
   useEventListener(iframe, 'click', (e) => {
-    // https://developer.chrome.com/blog/tap-to-search
-    e.preventDefault()
-
     for (const el of e.composedPath() as any) {
       // `instanceof` may not work in iframe
       if (el.tagName === 'A' && el.href) {
+        // Prevent the iframe from navigating to the link target.
+        e.preventDefault()
         tab.showPrevLocation()
         return
       }
