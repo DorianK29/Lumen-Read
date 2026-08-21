@@ -99,6 +99,20 @@ if (!IS_EXPORT) {
   }
 }
 
+// GitHub Pages serves project sites under a subpath (e.g. /Lumen-Read).
+// `basePath` prefixes routes/links while `assetPrefix` prefixes `/_next/`
+// assets. Only applied when NEXT_PUBLIC_BASE_PATH is set, so the extension
+// and Netlify builds are unaffected.
+const GH_PAGES_BASE_PATH = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(
+  /\/+$/,
+  '',
+)
+
+if (GH_PAGES_BASE_PATH) {
+  config.basePath = GH_PAGES_BASE_PATH
+  config.assetPrefix = `${GH_PAGES_BASE_PATH}/`
+}
+
 const base = withPWA(withTM(withBundleAnalyzer(config)))
 
 const dev = base
