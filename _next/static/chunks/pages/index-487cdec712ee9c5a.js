@@ -3319,16 +3319,6 @@ function BookPane(param) {
                 setClickedAnnotation(false);
                 return;
             }
-            var w = container.clientWidth;
-            var x = e.clientX % w;
-            var threshold = 0.3;
-            var side = w * threshold;
-            // Edge taps no longer turn pages. A center tap toggles the navbar on mobile.
-            if (mobile && x >= side && w - x >= side) {
-                setNavbar(function(a) {
-                    return !a;
-                });
-            }
         }
     });
     (0,hooks_dist/* useEventListener */.OR)(iframe, "wheel", function(e) {
@@ -3432,8 +3422,10 @@ function BookPane(param) {
         onPrev: function() {
             return tab.prev();
         },
-        onToc: function() {
-            setAction("toc");
+        onMore: function() {
+            setNavbar(function(a) {
+                return !a;
+            });
         },
         onClose: function() {
             // Close the current tab
@@ -3514,7 +3506,7 @@ function BookPane(param) {
     });
 }
 var ReaderPaneHeader = function(param) {
-    var title = param.title, _creator = param.creator, tabs = param.tabs, _selectedTabIndex = param.selectedTabIndex, selectedTabIndex = _selectedTabIndex === void 0 ? 0 : _selectedTabIndex, rtl = param.rtl, onTabSelect = param.onTabSelect, onTabClose = param.onTabClose, onNext = param.onNext, onPrev = param.onPrev, onToc = param.onToc, onClose = param.onClose, onMenu = param.onMenu;
+    var title = param.title, _creator = param.creator, tabs = param.tabs, _selectedTabIndex = param.selectedTabIndex, selectedTabIndex = _selectedTabIndex === void 0 ? 0 : _selectedTabIndex, rtl = param.rtl, onTabSelect = param.onTabSelect, onTabClose = param.onTabClose, onNext = param.onNext, onPrev = param.onPrev, onMore = param.onMore, onClose = param.onClose, onMenu = param.onMenu;
     var t = (0,hooks/* useTranslation */.$G)();
     // Truncate title if too long
     var truncatedTitle = title && title.length > 40 ? "".concat(title.substring(0, 40), "...") : title;
@@ -3623,7 +3615,7 @@ var ReaderPaneHeader = function(param) {
                         className: "mx-2 h-6 w-px bg-gray-200 dark:bg-gray-700"
                     }),
                     /*#__PURE__*/ (0,jsx_runtime.jsx)("button", {
-                        onClick: onToc,
+                        onClick: onMore,
                         className: "rounded p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800",
                         children: /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
                             className: "material-symbols-outlined",
