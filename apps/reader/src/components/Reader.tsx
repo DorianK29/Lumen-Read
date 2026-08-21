@@ -933,11 +933,8 @@ function BookPane({ tab, onMouseDown, active }: BookPaneProps) {
       const threshold = 0.3
       const side = w * threshold
 
-      if (x < side) {
-        tab.isRTL ? tab.next() : tab.prev()
-      } else if (w - x < side) {
-        tab.isRTL ? tab.prev() : tab.next()
-      } else if (mobile) {
+      // Edge taps no longer turn pages. A center tap toggles the navbar on mobile.
+      if (mobile && x >= side && w - x >= side) {
         setNavbar((a) => !a)
       }
     }
